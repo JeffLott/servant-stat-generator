@@ -1,6 +1,6 @@
 export enum CardType{
     Quick,
     Arts,
-    Brave,
+    Buster,
     Extra
 }
