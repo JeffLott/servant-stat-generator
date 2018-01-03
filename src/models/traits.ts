@@ -1,4 +1,5 @@
 export enum Traits{
+    Servant,
     Female,
     Genderless,
     Male,
@@ -13,5 +14,11 @@ export enum Traits{
     BrynhildrsBeloved,
     WeakToEnumaElesh,
     Arthur,
-    Saberface
+    Saberface,
+    Lawful,
+    Good,
+    Western,
+    AllyOfJustice,
+    NewComer,
+    Under165Cm
 }

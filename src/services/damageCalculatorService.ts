@@ -1,10 +1,10 @@
 import { Servant } from "../models/servant";
-import { DeckDamageResult, DamageResult } from "../dtos/deckDamageResult";
+import { DeckDamageResult } from "../dtos/deckDamageResult";
 import { CardType } from "../models/cardType";
 import { CardPosition } from "../models/cardPosition";
 import { Defender } from "../models/defender";
 import { SkillLevel } from "../models/skill";
-import { ArtsEffeciencySkillLevel, BusterEffeciencySkillLevel, QuickEffeciencySkillLevel, AttackUpSkillLevel, DamageUpSkillLevel } from '../interfaces/AttackDamageSkill';
+import { ArtsEffeciencySkillLevel, BusterEffeciencySkillLevel, QuickEffeciencySkillLevel, AttackUpSkillLevel, DamageUpSkillLevel } from '../interfaces/damageSkillLevel';
 import { DamageMultiplierService } from "./damageMultiplierService";
 import { ClassAdvantageService } from "./classAdvantageService";
 import { AttributeService } from "./attributeService";
@@ -15,9 +15,10 @@ export class DamageCalculatorService{
     private _classAdvantage : ClassAdvantageService;
     private _attributeService : AttributeService;
 
-    public constructor(damageMultiplier : DamageMultiplierService, classAdvantage: ClassAdvantageService){
+    public constructor(damageMultiplier : DamageMultiplierService, classAdvantage: ClassAdvantageService, attributeService: AttributeService){
         this._damageMultiplier = damageMultiplier;
         this._classAdvantage = classAdvantage;
+        this._attributeService = attributeService;
     }
 
     public getDeckDamage(servant: Servant, defender: Defender, activeSkillLevels: SkillLevel[]) : DeckDamageResult{
@@ -95,7 +96,7 @@ export class DamageCalculatorService{
         damage *= this._damageMultiplier.getClassModifier(servant.ServantClass);
         damage *= this._classAdvantage.getModifier(servant.ServantClass, defender.ServantClass);
         damage *= this._attributeService.getAttributeModifier(servant, defender);
-        damage *= this.getDamageUpModifier(activeSkillLevels, defender);
+        damage *= this.getAttackUpModifier(activeSkillLevels, defender);
 
         if(cardType == CardType.Extra && position == CardPosition.Extra){
             if(chainType == ChainType.Brave){
@@ -112,13 +113,13 @@ export class DamageCalculatorService{
             damage += (.2 * servant.Attack);
         }
 
-        return damage;
+        return Math.round(damage);
     }
 
     public getAdditionalDamage(activeSkillLevels: SkillLevel[]) : number{
         let damage = 0;
 
-        for(let skill in activeSkillLevels){
+        for(let skill of activeSkillLevels){
             if(this.isDamageUpSkill(skill)){
                 damage += skill.getDamageUpModifier();
             }
@@ -130,7 +131,7 @@ export class DamageCalculatorService{
     public getCardModifier(cardType: CardType, activeSkillLevels: SkillLevel[]) : number{
         let modifier = 1.0;
 
-        for(let skill in activeSkillLevels){
+        for(let skill of activeSkillLevels){
             if(cardType == CardType.Arts && this.isArtsSkill(skill)){
                 modifier += skill.getArtsModifier();
             }
@@ -145,10 +146,10 @@ export class DamageCalculatorService{
         return modifier;
     }
 
-    public getDamageUpModifier(activeSkillLevels: SkillLevel[], defender : Defender) : number{
+    public getAttackUpModifier(activeSkillLevels: SkillLevel[], defender : Defender) : number{
         let modifier = 1.0;
 
-        for(let skill in activeSkillLevels){
+        for(let skill of activeSkillLevels){
             if(this.isAttackUpSkill(skill)){
                 modifier += skill.getAttackUpModifier(defender);
             }
@@ -157,24 +158,24 @@ export class DamageCalculatorService{
         return modifier;
     }
 
-    private isArtsSkill(skill : any): skill is ArtsEffeciencySkillLevel{
-        return 'getArtsModifier' in skill;
+    private isArtsSkill(skill : SkillLevel): skill is ArtsEffeciencySkillLevel{
+        return (<ArtsEffeciencySkillLevel>skill).getArtsModifier != undefined;
     }
 
-    private isBusterSkill(skill : any): skill is BusterEffeciencySkillLevel{
-        return 'getBusterModifier' in skill;
+    private isBusterSkill(skill : SkillLevel): skill is BusterEffeciencySkillLevel{
+        return (<BusterEffeciencySkillLevel>skill).getBusterModifier != undefined;
     }
 
-    private isQuickSkill(skill : any): skill is QuickEffeciencySkillLevel{
-        return 'getQuickModifier' in skill;
+    private isQuickSkill(skill : SkillLevel): skill is QuickEffeciencySkillLevel{
+        return (<QuickEffeciencySkillLevel>skill).getQuickModifier != undefined;
     }
 
-    private isAttackUpSkill(skill : any): skill is AttackUpSkillLevel{
-        return 'getAttackUpModifier' in skill;
+    private isAttackUpSkill(skill : SkillLevel): skill is AttackUpSkillLevel{
+        return (<AttackUpSkillLevel>skill).getAttackUpModifier != undefined;
     }
 
-    private isDamageUpSkill(skill : any): skill is DamageUpSkillLevel{
-        return 'getDamageUpModifier' in skill;
+    private isDamageUpSkill(skill : SkillLevel): skill is DamageUpSkillLevel{
+        return (<DamageUpSkillLevel>skill).getDamageUpModifier != undefined;
     }
 
     public getCardDamageValue(cardType: CardType, position : CardPosition) : number{

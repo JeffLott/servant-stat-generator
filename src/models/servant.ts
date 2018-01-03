@@ -3,6 +3,7 @@ import { Deck } from "./deck";
 import { Traits } from "./traits";
 import { Attribute } from "./attributes";
 import { Defender } from "./defender";
+import { PassiveSkill, ActiveSkillContainer } from "./skill";
 
 export abstract class Servant extends Defender{
     private _name : string;
@@ -11,6 +12,9 @@ export abstract class Servant extends Defender{
     private _starGen : number;
     private _npGenAttack : number;
     private _npGenDefense : number;
+    protected _aliases : Array<string>;
+    protected _passiveSkills : Array<PassiveSkill>;
+    protected _activeSkills : Array<ActiveSkillContainer>;
 
     constructor(name: string, servantClass : ServantClass, attack : number, deck: Deck, 
         starGen : number, npGenAttack : number, npGenDefense: number, traits : Traits[], attribute: Attribute){
@@ -22,6 +26,9 @@ export abstract class Servant extends Defender{
         this._starGen = starGen;
         this._npGenAttack = npGenAttack;
         this._npGenDefense = npGenDefense;
+        this._passiveSkills = new Array<PassiveSkill>();
+        this._activeSkills = new Array<ActiveSkillContainer>();
+        this._aliases = new Array<string>();
     }
 
     public get name() : string {
@@ -47,4 +54,21 @@ export abstract class Servant extends Defender{
     public get NpGenDefense() : number{
         return this._npGenDefense;
     }
+
+    public get PassiveSkills() : PassiveSkill[]{
+        return this._passiveSkills;
+    }
+
+    public get ActiveSkills() : ActiveSkillContainer[]{
+        return this._activeSkills;
+    }
+
+    public get Aliases(): string[]{
+        return this._aliases;
+    }
+}
+
+export enum ServantIdentity{
+    Mashu,
+    Arturia
 }
