@@ -1,29 +1,23 @@
-import { ActiveSkill, ActiveSkillTarget, DescribedLevel } from "../models/skill";
+import { ActiveSkill, SkillLevel, EffectTarget } from "../models/skill";
 import { SkillIcon } from "../models/skillIcon";
-import { NpGenerationSkillLevel } from "../interfaces/npGenerationSkillLevel";
+import { Target } from "../models/target";
+import { Effect, EffectType } from "../models/effects";
 
 export class ShieldOfRousingResolution extends ActiveSkill{
     public constructor(){
-        super("Shield of Rousing Resolution", SkillIcon.FocusTarget, "Increase your NP Gain (1 turn).\r\nApply Target Focus to self (1 turn).", 8, ActiveSkillTarget.Self);
+        super("Shield of Rousing Resolution", SkillIcon.FocusTarget, "Increase your NP Gain (1 turn).\r\nApply Target Focus to self (1 turn).", 8);
 
         for(let i = 10; i >= 1; i--){
-            this._levels.push(new RousingShieldSkill(180 + (20 * i)));
+            this._levels.push(this.getLevel(i));
         }
     }
 
-}
+    private getLevel(level: number) : SkillLevel{
+        let npGain = 180 + (20 * level);
 
-class RousingShieldSkill implements DescribedLevel , NpGenerationSkillLevel{
-    private _npGenerationAmount : number;
-
-    public constructor(npGenerationAmount : number){
-        this._npGenerationAmount = npGenerationAmount / 100;
-        this.levelDescription = `Increase your NP Gain by ${npGenerationAmount} (1 turn).\r\nApply Target Focus to self (1 turn).`;
+        return new SkillLevel(`Increase your NP Gain by ${npGain} (1 turn).\r\nApply Target Focus to self (1 turn).)`, Target.Self, 
+            new EffectTarget(Target.Self, new Effect(EffectType.FocusTarget, 0)), 
+            new EffectTarget(Target.Self, new Effect(EffectType.NpGain, npGain/100))
+        );
     }
-    
-    getGenerationUpAmount(): number {
-        return this._npGenerationAmount;
-    }
-
-    levelDescription: string;
 }

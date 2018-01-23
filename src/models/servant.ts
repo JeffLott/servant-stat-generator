@@ -2,10 +2,10 @@ import { ServantClass } from "./class";
 import { Deck } from "./deck";
 import { Traits } from "./traits";
 import { Attribute } from "./attributes";
-import { Defender } from "./defender";
+import { Combatant } from "./combatant";
 import { PassiveSkill, ActiveSkillContainer } from "./skill";
 
-export abstract class Servant extends Defender{
+export abstract class Servant extends Combatant{
     private _name : string;
     private _attack : number;
     private _deck : Deck;
@@ -35,35 +35,35 @@ export abstract class Servant extends Defender{
         return this._name;
     }
 
-    public get Attack() : number{
+    public get attack() : number{
         return this._attack;
     }
 
-    public get Deck() : Deck{
+    public get deck() : Deck{
         return this._deck;
     }
 
-    public get StarGen() : number{
+    public get starGen() : number{
         return this._starGen;
     }
 
-    public get NpGenAttack() : number{
+    public get npGenAttack() : number{
         return this._npGenAttack;
     }
 
-    public get NpGenDefense() : number{
+    public get npGenDefense() : number{
         return this._npGenDefense;
     }
 
-    public get PassiveSkills() : PassiveSkill[]{
+    public get passiveSkills() : PassiveSkill[]{
         return this._passiveSkills;
     }
 
-    public get ActiveSkills() : ActiveSkillContainer[]{
+    public get activeSkills() : ActiveSkillContainer[]{
         return this._activeSkills;
     }
 
-    public get Aliases(): string[]{
+    public get aliases(): string[]{
         return this._aliases;
     }
 }

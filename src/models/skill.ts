@@ -1,4 +1,6 @@
 import { SkillIcon } from "./skillIcon";
+import { Effect } from "./effects";
+import { Target } from "./target";
 
 export abstract class Skill{
     private _name : string;
@@ -10,56 +12,50 @@ export abstract class Skill{
         this._icon = icon;
     }
 
-    public get Name() : string{
+    public get name() : string{
         return this._name;
     }
 
-    public get Icon() : SkillIcon{
+    public get icon() : SkillIcon{
         return this._icon;
     }
 
-    public get Description() : string{
+    public get description() : string{
         return this._description;
     }
 }
 
 export abstract class PassiveSkill extends Skill{
-    private _skillLevel : SkillLevel;
+    private _effect : Effect;
 
-    public constructor(name: string, icon : SkillIcon, description: string, skillLevel : SkillLevel){
+    public constructor(name: string, icon : SkillIcon, description: string, effect: Effect){
         super(name, icon, description);
 
-        this._skillLevel = skillLevel;
+        this._effect = effect;
     }
 
-    public get SkillLevel() : SkillLevel{
-        return this._skillLevel;
+    public get effect() : Effect{
+        return this._effect;
     }
 }
 
 export abstract class ActiveSkill extends Skill{
     private _baseCoolDown : number;
-    private _target : ActiveSkillTarget;
-    protected _levels : Array<DescribedLevel>;
+    protected _levels : Array<SkillLevel>;
     
-    public constructor(name: string, icon : SkillIcon, description : string, baseCooldown : number, target: ActiveSkillTarget){
+    public constructor(name: string, icon : SkillIcon, description : string, baseCooldown : number){
         super(name, icon, description);
 
         this._baseCoolDown = baseCooldown;
-        this._target = target;
-        this._levels = new Array<DescribedLevel>();
+        this._levels = new Array<SkillLevel>();
     }
 
-    public get BaseCooldown() : number{
+    public get baseCooldown() : number{
         return this._baseCoolDown;
     }
 
-    public get Levels() : DescribedLevel[]{
+    public get levels() : SkillLevel[]{
         return this._levels;
-    }
-
-    public get Target() : ActiveSkillTarget{
-        return this._target;
     }
 }
 
@@ -70,21 +66,49 @@ export class ActiveSkillContainer{
         this._options = skillOptions;
     }
 
-    public get SkillOptions() : ActiveSkill[]{
+    public get skillOptions() : ActiveSkill[]{
         return this._options;
     }
 }
 
-export enum ActiveSkillTarget{
-    Self,
-    AnyAlly,
-    AllAllies,
-    Enemy,
-    AllEnemies
+export class SkillLevel {
+    private readonly _description : string;
+    private readonly _target : Target;
+    private readonly _effects: Array<EffectTarget>;
+
+    public constructor(description: string, target: Target, ...effects: Array<EffectTarget>){
+        this._description = description;
+        this._target = target;
+        this._effects = effects;
+    }
+
+    public get description(): string{
+        return this._description;
+    }
+
+    public get target(): Target{
+        return this._target;
+    }
+
+    public get effects(): EffectTarget[]{
+        return this._effects;
+    }
 }
 
-export interface SkillLevel{}
+export class EffectTarget{
+    private readonly _target : Target;
+    private readonly _effect : Effect;
 
-export interface DescribedLevel extends SkillLevel{
-    readonly levelDescription : string;
+    public constructor(target: Target, effect: Effect){
+        this._target = target;
+        this._effect = effect;
+    }
+
+    public get target() : Target{
+        return this._target;
+    }
+
+    public get effect() :Effect{
+        return this._effect;
+    }
 }
