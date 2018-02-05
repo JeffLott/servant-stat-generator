@@ -1,7 +1,7 @@
 import { Servant } from "../models/servant";
 import { MashuKyrielight } from "../servants/MashuKyrielight";
 
-export class ServantRepository{
+class ServantRepository{
     private readonly _servants : Array<Servant> = new Array<Servant>();
 
     public constructor(){
@@ -12,3 +12,5 @@ export class ServantRepository{
         return this._servants;
     }
 }
+
+export default ServantRepository;
