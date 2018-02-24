@@ -24,7 +24,7 @@ class ServantNavBar extends React.Component{
         this.populateServants();
 
         this.menuList = this.classGroupings.map((grouping) => {
-            return <ServantClassNavItem servantClass={grouping} key={grouping.className}></ServantClassNavItem>
+            return <ServantClassNavItem servantClass={grouping} key={grouping.className} onServantSelect={(servant) => {console.log(servant);this.setState({...this.state, servant: servant});}}></ServantClassNavItem>
         })
     }
 
@@ -70,7 +70,7 @@ class ServantNavBar extends React.Component{
                 </AppBar>
                 {drawer}
                 <main>
-                    <Typography>{'You think water moves fast? You should see ice.'}</Typography>
+                    <Typography>{this.state.servant ? this.state.servant.name : "No servant selected."}</Typography>
                 </main>
             </div>
         );
@@ -79,6 +79,7 @@ class ServantNavBar extends React.Component{
 
 class NavBarState{
     public open : boolean;
+    public servant: Servant;
 
     constructor(){
         this.open = false;
