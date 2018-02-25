@@ -15,6 +15,9 @@ export class TransientWallOfSnowflakes extends ActiveSkill{
     private getSkillLevel(level: number) : SkillLevel{
         let def = .095 + (.005 * level);
 
+        if(level == 10)
+            def = .15;
+
         return new SkillLevel(`Increase all allies DEF by ${(def * 100).toFixed(1)}% for 3 turns.`, Target.AllAllies, new EffectTarget(Target.AllAllies, new Effect(EffectType.DefenseUp, def)));
     }
 }
@@ -31,7 +34,10 @@ export class ExaltedImperviousWallOfSnowflakes extends ActiveSkill{
     private getSkillLevel(level: number) : SkillLevel{
         let def = .145 + (.005 * level);
 
-        return new SkillLevel(`Increase all allies DEF by ${def * 100}% for 3 turns.<br/>Apply Damage Cut [2000] to all allies (1 hit).`, 
+        if(level == 10)
+            def = .20;
+
+        return new SkillLevel(`Increase all allies DEF by ${(def * 100).toFixed(1)}% for 3 turns.<br/>Apply Damage Cut [2000] to all allies (1 hit).`, 
             Target.AllAllies,
              new EffectTarget(Target.AllAllies, new Effect(EffectType.DefenseUp, def)), 
              new EffectTarget(Target.AllAllies, new Effect(EffectType.DamageCut, 2000))

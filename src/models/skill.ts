@@ -10,6 +10,7 @@ export abstract class Skill{
     public constructor(name: string, icon: SkillIcon, description: string){
         this._name = name;
         this._icon = icon;
+        this._description = description;
     }
 
     public get name() : string{

@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { Servant } from '../models/servant';
 import { Effect } from '../models/effects';
-import  { Paper, Table, TableBody, TableRow, TableCell, Grid, TextField } from 'material-ui';
+import { Paper, Table, TableBody, TableRow, TableCell, Grid, TextField, Tabs, Tab, Typography } from 'material-ui';
 import { ServantClass } from '../models/class';
 import './servantDisplay.css';
-import ServantSkillComponent from './servantSkill';
+import ServantActiveSkill from './servantActiveSkill';
+import { Attribute } from '../models/attributes';
+import ServantPassiveSkills from './servantPassiveSkills';
 
 export interface ServantDisplayProps{
     servant : Servant;
@@ -14,16 +16,19 @@ export class ServantDisplayState{
     constructor(servant: Servant){
         this.activeEffects = new Array<Effect>();
         this.servant = servant;
+        this.selectedTab = 0;
+        console.log('new state');
     }
-
+    selectedTab: number;
     activeEffects: Effect[];
-    public servant: Servant;
+    servant: Servant;
 }
 
 class ServantDisplay extends React.Component<ServantDisplayProps, ServantDisplayState>{
     constructor(props: ServantDisplayProps){
         super(props);
 
+        console.log('constructor called');
         this.state = new ServantDisplayState(props.servant);
     }
 
@@ -32,9 +37,18 @@ class ServantDisplay extends React.Component<ServantDisplayProps, ServantDisplay
         this.setState(this.state);
       };
 
+    handleTabSelect = (event : any, value : number) => {
+        this.setState({selectedTab: value}, () => {console.log(this.state)});
+    }
+
+    componentWillReceiveProps(nextProps: ServantDisplayProps){
+        if(nextProps !== this.props){
+            this.setState({servant: nextProps.servant});
+        }
+    }
+
     render(){
         console.log('render called.');
-        this.state = new ServantDisplayState(this.props.servant);
 
         if(!this.state.servant)
             return <div></div>;
@@ -42,7 +56,7 @@ class ServantDisplay extends React.Component<ServantDisplayProps, ServantDisplay
         return  <Grid container alignItems="center">
             <Grid item xs={4}/>
             <Grid item xs={4}>        
-                <Paper>
+                <Paper className="paper-display">
                     <Table>
                         <TableBody>
                             <TableRow>
@@ -63,6 +77,14 @@ class ServantDisplay extends React.Component<ServantDisplayProps, ServantDisplay
                             </TableRow>
                             <TableRow>
                                 <TableCell>
+                                    <b>Attribute:</b>
+                                </TableCell>
+                                <TableCell>
+                                    {Attribute[this.state.servant.attribute]}
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>
                                     <b>Attack:</b>
                                 </TableCell>
                                 <TableCell>
@@ -72,9 +94,22 @@ class ServantDisplay extends React.Component<ServantDisplayProps, ServantDisplay
                         </TableBody>
                     </Table>
                 </Paper>
-                {this.state.servant.activeSkills.map( (skill, index) => {
-                    return <ServantSkillComponent skillContainer={skill} key={index}></ServantSkillComponent>;
-                })}
+                <Typography type="title" align="center">Passive Skills</Typography>
+                <ServantPassiveSkills passiveSkills={this.state.servant.passiveSkills}></ServantPassiveSkills>
+                <Typography type="title" align="center">Active Skills</Typography>
+                <Paper className="paper-display">
+                    <Tabs value={this.state.selectedTab ? this.state.selectedTab : 0} onChange={this.handleTabSelect}>
+                        <Tab value={0} label={"1st Skill"}/>
+                        <Tab value={1} label={"2nd Skill"}/>
+                        <Tab value={2} label={"3rd Skill"}/>
+                    </Tabs>
+                    {this.state.servant.activeSkills.map( (skill, index) => {
+                        if(this.state.selectedTab === index)
+                            return <ServantActiveSkill skillContainer={skill} key={index}></ServantActiveSkill>;
+
+                        return;
+                    })}
+                </Paper>
             </Grid>
             <Grid item xs={4}/>
         </Grid>;

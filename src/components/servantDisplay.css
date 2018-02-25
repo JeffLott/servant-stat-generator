@@ -1,4 +1,9 @@
-.skill-paper{
-    padding: 5px;
-    margin-top: 10px;
+.paper-display{
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.skill-description-wrapper{
+    padding-top: 5px;
+    padding-left: 5px;
 }
