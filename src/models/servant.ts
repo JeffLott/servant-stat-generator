@@ -39,6 +39,10 @@ export abstract class Servant extends Combatant{
         return this._attack;
     }
 
+    public set attack(value: number){
+        this._attack = value;
+    }
+
     public get deck() : Deck{
         return this._deck;
     }

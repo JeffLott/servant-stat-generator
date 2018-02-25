@@ -9,6 +9,7 @@ import Divider from 'material-ui/Divider';
 import { List} from 'material-ui';
 import { ClassGroupingDto, ServantListDisplayDto } from '../dtos/classGroupingDto';
 import ServantClassNavItem from './servantClassNavItem';
+import ServantDisplay from './servantDisplay';
 
 class ServantNavBar extends React.Component{
     state : NavBarState;
@@ -24,7 +25,7 @@ class ServantNavBar extends React.Component{
         this.populateServants();
 
         this.menuList = this.classGroupings.map((grouping) => {
-            return <ServantClassNavItem servantClass={grouping} key={grouping.className} onServantSelect={(servant) => {console.log(servant);this.setState({...this.state, servant: servant});}}></ServantClassNavItem>
+            return <ServantClassNavItem servantClass={grouping} key={grouping.className} onServantSelect={(servant) => {this.setState({...this.state, servant: servant});}}></ServantClassNavItem>
         })
     }
 
@@ -70,7 +71,7 @@ class ServantNavBar extends React.Component{
                 </AppBar>
                 {drawer}
                 <main>
-                    <Typography>{this.state.servant ? this.state.servant.name : "No servant selected."}</Typography>
+                    <ServantDisplay servant={this.state.servant}></ServantDisplay>
                 </main>
             </div>
         );

@@ -7,7 +7,7 @@ export class ShieldOfRousingResolution extends ActiveSkill{
     public constructor(){
         super("Shield of Rousing Resolution", SkillIcon.FocusTarget, "Increase your NP Gain (1 turn).\r\nApply Target Focus to self (1 turn).", 8);
 
-        for(let i = 10; i >= 1; i--){
+        for(let i = 1; i <= 10; i++){
             this._levels.push(this.getLevel(i));
         }
     }
