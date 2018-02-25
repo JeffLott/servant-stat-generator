@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { PassiveSkill, Skill } from '../models/skill';
+import { PassiveSkill } from '../models/skill';
 import { Paper, Tabs, Tab, Grid } from 'material-ui';
 import { SkillIconHelper } from '../helpers/skillIconHelper';
 
@@ -18,14 +18,6 @@ class ServantPassiveSkills extends React.Component<ServantPassiveSkillsProps, Se
         this.state = new ServantPassiveSkillsState();
     }
 
-    getStyle(skill: Skill) : any{
-        return {
-            background: "url('"  + SkillIconHelper.getSkillIcon(skill) + "')",
-            height: 93,
-            width: 93
-        };
-    }
-
     render(){
         return <Paper className={"paper-display"}>
             <Tabs value={this.state.selectedTab} onChange={(event : any, value : number) => this.setState({selectedTab: value})}>
@@ -39,7 +31,7 @@ class ServantPassiveSkills extends React.Component<ServantPassiveSkillsProps, Se
                 
                 return <Grid container key={index} className="skill-description-wrapper" alignItems="center">
                     <Grid item xs={2}>
-                        <div style={this.getStyle(skill)}/>
+                        <img src={SkillIconHelper.getSkillIcon(skill)} className="wrapped-image"/>
                     </Grid>
                     <Grid item xs={9}>
                         <div dangerouslySetInnerHTML={{__html: skill.description}}></div>

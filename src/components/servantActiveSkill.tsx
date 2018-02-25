@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ActiveSkillContainer, Skill } from '../models/skill';
+import { ActiveSkillContainer } from '../models/skill';
 import { Tabs, Tab, Paper, Grid, Table, TableBody, TableCell, TableRow, MenuItem, Select } from 'material-ui';
 import { SkillIconHelper } from '../helpers/skillIconHelper';
 
@@ -23,14 +23,6 @@ class ServantActiveSkill extends React.Component<ServantActiveSkillProps, Servan
         this.setState({ selectedTab: value });
     };
     
-    getStyle(skill: Skill) : any{
-        return {
-            background: "url('"  + SkillIconHelper.getSkillIcon(skill) + "')",
-            height: 93,
-            width: 93
-        };
-    }
-
     render(){
         return <Paper className={"skill-paper"}>
             <Tabs value={this.state.selectedTab} onChange={this.handleChange} indicatorColor="primary" fullWidth>
@@ -43,9 +35,9 @@ class ServantActiveSkill extends React.Component<ServantActiveSkillProps, Servan
                     return <div key={index} className="skill-description-wrapper">
                         <Grid container>
                             <Grid item xs={2}>
-                                <div style={this.getStyle(skill)}/>
+                                <img src={SkillIconHelper.getSkillIcon(skill)} className="wrapped-image"/>
                             </Grid>
-                            <Grid item xs={9}>
+                            <Grid item xs={10}>
                                 <Table>
                                     <TableBody>
                                         <TableRow>

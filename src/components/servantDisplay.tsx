@@ -7,6 +7,7 @@ import './servantDisplay.css';
 import ServantActiveSkill from './servantActiveSkill';
 import { Attribute } from '../models/attributes';
 import ServantPassiveSkills from './servantPassiveSkills';
+import DeckDisplay from './deckDisplay';
 
 export interface ServantDisplayProps{
     servant : Servant;
@@ -104,12 +105,11 @@ class ServantDisplay extends React.Component<ServantDisplayProps, ServantDisplay
                         <Tab value={2} label={"3rd Skill"}/>
                     </Tabs>
                     {this.state.servant.activeSkills.map( (skill, index) => {
-                        if(this.state.selectedTab === index)
-                            return <ServantActiveSkill skillContainer={skill} key={index}></ServantActiveSkill>;
-
-                        return;
+                        return <div key={index} className={this.state.selectedTab !== index ? 'hidden' : ''}><ServantActiveSkill skillContainer={skill}></ServantActiveSkill></div>;
                     })}
                 </Paper>
+                <Typography type="title" align="center" gutterBottom>Deck</Typography>
+                <DeckDisplay deck={this.state.servant.deck} effects={this.state.activeEffects}></DeckDisplay>
             </Grid>
             <Grid item xs={4}/>
         </Grid>;

@@ -7,3 +7,12 @@
     padding-top: 5px;
     padding-left: 5px;
 }
+
+.hidden{
+    display: none;
+}
+
+.wrapped-image{
+    max-height: 100%;
+    max-width: 100%;
+}
