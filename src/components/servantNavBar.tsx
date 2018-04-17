@@ -25,7 +25,7 @@ class ServantNavBar extends React.Component{
         this.populateServants();
 
         this.menuList = this.classGroupings.map((grouping) => {
-            return <ServantClassNavItem servantClass={grouping} key={grouping.className} onServantSelect={(servant) => {this.setState({...this.state, servant: servant});}}></ServantClassNavItem>
+            return <ServantClassNavItem servantClass={grouping} key={grouping.className} onServantSelect={(servant) => {this.setState({servant: servant});}}></ServantClassNavItem>
         })
     }
 
@@ -50,7 +50,7 @@ class ServantNavBar extends React.Component{
 
         const drawer = (
         <Drawer
-            type="permanent"
+            variant="permanent"
             anchor="left"
             className="drawer-paper"
         >
@@ -64,7 +64,7 @@ class ServantNavBar extends React.Component{
             <div className="app-frame">
                 <AppBar className="app-bar">
                     <Toolbar>
-                        <Typography type="title" color="inherit" noWrap>
+                        <Typography variant="title" color="inherit" noWrap>
                             Servant Simulator
                         </Typography>
                     </Toolbar>
